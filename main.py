@@ -20,7 +20,8 @@ class MainWindow(QMainWindow):
         help_menu_item = self.menuBar().addMenu("&Help")
         edit_menu_item = self.menuBar().addMenu("&Edit")
 
-        add_insurance_action = QAction(QIcon("icons/add.png"), "Add Record", self)
+        add_insurance_action = QAction(QIcon("icons/add.png"), "Add Record",
+                                       self)
         add_insurance_action.triggered.connect(self.insert)
         file_menu_item.addAction(add_insurance_action)
 
@@ -29,7 +30,7 @@ class MainWindow(QMainWindow):
         about_action.triggered.connect(self.about)
 
         search_insurance_action = QAction(QIcon("icons/search.png"),
-                                        "Search Record", self)
+                                          "Search Record", self)
         search_insurance_action.triggered.connect(self.search)
         edit_menu_item.addAction(search_insurance_action)
 
@@ -55,6 +56,10 @@ class MainWindow(QMainWindow):
         self.table.cellClicked.connect(self.cell_clicked)
 
     def cell_clicked(self):
+        """
+
+        :return:
+        """
         edit_button = QPushButton("Edit Record")
         edit_button.clicked.connect(self.edit)
 
@@ -70,6 +75,10 @@ class MainWindow(QMainWindow):
         self.statusbar.addWidget(delete_button)
 
     def load_data(self):
+        """
+
+        :return:
+        """
         connection = DatabaseConnection().connect()
         result = connection.execute("SELECT * FROM insurance")
         self.table.setRowCount(0)
@@ -110,7 +119,7 @@ class InsertDialog(QDialog):
 
         layout = QVBoxLayout()
 
-        # Add students name widget
+        # Add insurance name widget
         self.insurance_name = QLineEdit()
         self.insurance_name.setPlaceholderText("Name")
         layout.addWidget(self.insurance_name)
@@ -128,7 +137,7 @@ class InsertDialog(QDialog):
 
         # Add age widget
         self.age = QLineEdit()
-        self.mobile.setPlaceholderText("Age")
+        self.age.setPlaceholderText("Age")
         layout.addWidget(self.age)
 
         # Add a submit button
@@ -163,7 +172,7 @@ class SearchDialog(QDialog):
 
         layout = QVBoxLayout()
 
-        # Add students name widget
+        # Add insurance name widget
         self.insurance_name = QLineEdit()
         self.insurance_name.setPlaceholderText("Name")
         layout.addWidget(self.insurance_name)
@@ -179,7 +188,8 @@ class SearchDialog(QDialog):
         name = self.insurance_name.text()
         connection = DatabaseConnection().connect()
         cursor = connection.cursor()
-        result = cursor.execute("SELECT * FROM insurance WHERE name = ?", (name,))
+        result = cursor.execute("SELECT * FROM insurance WHERE name = ?",
+                                (name,))
         rows = list(result)
         print(rows)
         items = main_window.table.findItems(name,
@@ -242,13 +252,14 @@ class EditDialog(QDialog):
     def update_insurance(self):
         connection = DatabaseConnection().connect()
         cursor = connection.cursor()
-        cursor.execute("UPDATE insurance SET name = ?, course = ?, mobile = ?, age = ? "
-                       "WHERE id =?",
-                       (self.insurance_name.text(),
-                        self.course_name.itemText(self.course_name.currentIndex()),
-                        self.mobile.text(),
-                        self.age.text(),
-                        self.insurance_id))
+        cursor.execute(
+            "UPDATE insurance SET name = ?, course = ?, mobile = ?, age = ? "
+            "WHERE id =?",
+            (self.insurance_name.text(),
+             self.course_name.itemText(self.course_name.currentIndex()),
+             self.mobile.text(),
+             self.age.text(),
+             self.insurance_id))
         connection.commit()
         cursor.close()
         connection.close()
@@ -266,7 +277,7 @@ class DeleteDialog(QDialog):
         yes = QPushButton("Yes")
         no = QPushButton("No")
 
-        layout.addWidget(confirmation, 0, 0 , 1 , 2)
+        layout.addWidget(confirmation, 0, 0, 1, 2)
         layout.addWidget(yes, 1, 0)
         layout.addWidget(no, 1, 1)
         self.setLayout(layout)
@@ -280,7 +291,7 @@ class DeleteDialog(QDialog):
 
         connection = DatabaseConnection().connect()
         cursor = connection.cursor()
-        cursor.execute("DELETE from insurance WHERE id = ?", (insurance_id, ))
+        cursor.execute("DELETE from insurance WHERE id = ?", (insurance_id,))
         connection.commit()
         cursor.close()
         connection.close()
