@@ -7,6 +7,7 @@ from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtCore import Qt
 
 from DatabaseConnection import DatabaseConnection
+from AboutDialog import AboutDialog
 
 
 class MainWindow(QMainWindow):
@@ -110,17 +111,6 @@ class MainWindow(QMainWindow):
         dialog.exec()
 
 
-class AboutDialog(QMessageBox):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("About")
-        content = """
-        This app was created for the final exam purpose 
-        in the IT Network course"""
-
-        self.setText(content)
-
-
 class InsertDialog(QDialog):
     def __init__(self):
         super().__init__()
@@ -177,7 +167,6 @@ class InsertDialog(QDialog):
         cursor.close()
         connection.close()
         main_window.load_data()
-
 
 class SearchDialog(QDialog):
     def __init__(self):
